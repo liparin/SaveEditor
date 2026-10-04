@@ -1,0 +1,24 @@
+# Lazarus / Free Pascal
+*.o
+*.ppu
+*.dcu
+*.a
+*.lib
+*.bak
+*.local
+*.lps
+*.dsk
+*.identcache
+*.projdata
+*.compiled
+*.exe
+*.dll
+
+# OS
+~*
+Thumbs.db
+.DS_Store
+
+# Build dirs
+build/
+dist/
