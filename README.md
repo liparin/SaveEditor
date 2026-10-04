@@ -29,4 +29,4 @@ See `tables/template.xml` for a full example.
 
 ## License
 
-MIT
+Apache 2.0
