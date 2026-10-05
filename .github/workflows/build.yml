@@ -1,0 +1,29 @@
+name: Build SaveEditor
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Lazarus
+        run: choco install lazarus -y
+
+      - name: Build Project
+        run: |
+          set PATH=%PATH%;C:\lazarus
+          lazbuild --build-all SaveEditor.lpi
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SaveEditor-Windows
+          path: SaveEditor.exe
