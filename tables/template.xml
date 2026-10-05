@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SaveTable game="MyGame" version="1.0" endian="little">
+  <Hash algorithm="crc32" offset="0" length="4" targetOffset="4" targetLength="996" />
+  <Entries>
+    <Entry name="PlayerName"   offset="16" type="string"  length="32" />
+    <Entry name="PlayerLevel"  offset="48" type="int32" />
+    <Entry name="PlayerHP"     offset="52" type="float" />
+    <Entry name="PlayerGold"   offset="56" type="int32" />
+    <Entry name="InventoryCount" offset="60" type="int32" />
+    <Entry name="Inventory"    offset="64" type="array" count="20" entrySize="8">
+      <Entry name="ItemID"   offset="0" type="int32" />
+      <Entry name="ItemQty"  offset="4" type="int32" />
+    </Entry>
+  </Entries>
+</SaveTable>
