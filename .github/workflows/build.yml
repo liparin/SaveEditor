@@ -29,13 +29,17 @@ jobs:
           $fpcUnits = "$fpcPath\units\win64-x64"
           $lazUnits = "$lazPath\lcl\units\win64-x64"
           
-          # Формируем команду как единую строку — это решает проблему с кавычками в PowerShell
-          $cmd = "lazbuild -B -Fu$fpcUnits -Fu\$lazUnits SaveEditor.lpi"
-          Write-Host "Executing: \$cmd"
-          Invoke-Expression \$cmd
+          # ВАЖНО: Вызываем lazbuild напрямую, передавая аргументы списком.
+          # PowerShell сам корректно экранирует пути и передает их в exe-файл.
+          # Не используй Invoke-Expression и не собирай одну строку!
+          lazbuild -B `
+            -Fu"\$fpcUnits" `
+            -Fu"\$lazUnits" `
+            SaveEditor.lpi
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: SaveEditor-Windows
           path: SaveEditor.exe
+
