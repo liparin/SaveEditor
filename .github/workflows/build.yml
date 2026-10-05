@@ -9,19 +9,23 @@ on:
 jobs:
   build-windows:
     runs-on: windows-latest
-    
+
     steps:
+      # 1. Забираем твой код из репозитория
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 2. Ставим Lazarus (автоматически, без choco, без ручных путей)
       - name: Install Lazarus
-        run: choco install lazarus -y
+        uses: gcarreno/setup-lazarus@v3
+        with:
+          lazarus-version: "stable"
 
+      # 3. Компилируем проект. setup-lazarus уже добавил lazbuild в PATH
       - name: Build Project
-        run: |
-          set PATH=%PATH%;C:\lazarus
-          lazbuild --build-all SaveEditor.lpi
+        run: lazbuild -B SaveEditor.lpi
 
+      # 4. Сохраняем результат как артефакт (чтобы ты мог скачать .exe)
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
