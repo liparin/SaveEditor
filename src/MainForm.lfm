@@ -1,0 +1,116 @@
+object FormMain: TFormMain
+  Left = 200
+  Height = 480
+  Top = 120
+  Width = 640
+  BorderStyle = bsSingle
+  Caption = 'Save Editor'
+  Font.Name = 'MS Sans Serif'
+  Font.Size = 8
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  Position = poScreenCenter
+  object MainMenu: TMainMenu
+    left = 8
+    top = 8
+    object MenuFile: TMenuItem
+      Caption = 'File'
+      object MiLoadTable: TMenuItem
+        Caption = 'Load Table...'
+        OnClick = MiLoadTableClick
+      end
+      object MiLoadSave: TMenuItem
+        Caption = 'Load Save...'
+        OnClick = MiLoadSaveClick
+      end
+      object N1: TMenuItem
+        Caption = '-'
+      end
+      object MiExit: TMenuItem
+        Caption = 'Exit'
+        OnClick = MiExitClick
+      end
+    end
+    object MenuHelp: TMenuItem
+      Caption = 'Help'
+      object MiAbout: TMenuItem
+        Caption = 'About'
+        OnClick = MiAboutClick
+      end
+    end
+  end
+  object PanelTop: TPanel
+    Left = 0
+    Height = 41
+    Top = 0
+    Width = 640
+    Align = alTop
+    BevelOuter = bvNone
+    ClientHeight = 41
+    ClientWidth = 640
+    object BtnLoadTable: TButton
+      Left = 8
+      Height = 25
+      Top = 8
+      Width = 90
+      Caption = 'Load Table'
+      OnClick = BtnLoadTableClick
+      TabOrder = 0
+    end
+    object BtnLoadSave: TButton
+      Left = 104
+      Height = 25
+      Top = 8
+      Width = 90
+      Caption = 'Load Save'
+      OnClick = BtnLoadSaveClick
+      TabOrder = 1
+    end
+    object BtnSave: TButton
+      Left = 200
+      Height = 25
+      Top = 8
+      Width = 90
+      Caption = 'Save'
+      OnClick = BtnSaveClick
+      TabOrder = 2
+    end
+  end
+  object ValueGrid: TStringGrid
+    Left = 0
+    Height = 375
+    Top = 41
+    Width = 640
+    Align = alClient
+    ColCount = 4
+    FixedCols = 0
+    FixedRows = 1
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goEditing]
+    RowCount = 1
+    TabOrder = 1
+    TitleStyle = tsStandard
+    ColWidths = (
+      150
+      200
+      70
+      100
+    )
+  end
+  object StatusBar: TStatusBar
+    Left = 0
+    Height = 24
+    Top = 416
+    Width = 640
+    Panels = <>
+    SimplePanel = True
+    SimpleText = 'Ready'
+  end
+  object OpenDialog: TOpenDialog
+    left = 48
+    top = 8
+  end
+  object SaveDialog: TSaveDialog
+    left = 88
+    top = 8
+  end
+end
