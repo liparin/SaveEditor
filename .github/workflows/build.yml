@@ -20,7 +20,12 @@ jobs:
           lazarus-version: "stable"
 
       - name: Build Project
-        run: lazbuild -B SaveEditor.lpi
+        shell: pwsh
+        run: |
+          $lazbuildExe = (Get-Command lazbuild).Source
+          $lazarusDir = Split-Path $lazbuildExe -Parent
+          Write-Host "Lazarus dir: $lazarusDir"
+          & lazbuild --lazarusdir="$lazarusDir" -B SaveEditor.lpi
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
