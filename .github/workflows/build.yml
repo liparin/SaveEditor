@@ -16,30 +16,14 @@ jobs:
 
       - name: Install Lazarus
         uses: gcarreno/setup-lazarus@v3
-        id: setup-lazarus
         with:
           lazarus-version: "stable"
 
       - name: Build Project
-        shell: pwsh
-        run: |
-          $fpcPath = "${{ steps.setup-lazarus.outputs.fpc-path }}"
-          $lazPath = "${{ steps.setup-lazarus.outputs.lazarus-path }}"
-          
-          $fpcUnits = "$fpcPath\units\win64-x64"
-          $lazUnits = "$lazPath\lcl\units\win64-x64"
-          
-          # ВАЖНО: Вызываем lazbuild напрямую, передавая аргументы списком.
-          # PowerShell сам корректно экранирует пути и передает их в exe-файл.
-          # Не используй Invoke-Expression и не собирай одну строку!
-          lazbuild -B `
-            -Fu"\$fpcUnits" `
-            -Fu"\$lazUnits" `
-            SaveEditor.lpi
+        run: lazbuild -B SaveEditor.lpi
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: SaveEditor-Windows
           path: SaveEditor.exe
-
