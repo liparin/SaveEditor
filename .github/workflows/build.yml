@@ -29,14 +29,13 @@ jobs:
           $fpcUnits = "$fpcPath\units\win64-x64"
           $lazUnits = "$lazPath\lcl\units\win64-x64"
           
-          Write-Host "FPC Units: \$fpcUnits"
-          Write-Host "LCL Units: \$lazUnits"
-          
-          lazbuild -B -Fu"$fpcUnits" -Fu"$lazUnits" SaveEditor.lpi
+          # Формируем команду как единую строку — это решает проблему с кавычками в PowerShell
+          $cmd = "lazbuild -B -Fu$fpcUnits -Fu\$lazUnits SaveEditor.lpi"
+          Write-Host "Executing: \$cmd"
+          Invoke-Expression \$cmd
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: SaveEditor-Windows
           path: SaveEditor.exe
-
