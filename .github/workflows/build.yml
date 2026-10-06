@@ -23,31 +23,16 @@ jobs:
         shell: pwsh
         run: |
           $lazDir = Split-Path (Get-Command lazbuild).Source -Parent
-          $fpcCfg = Join-Path $lazDir "fpc\3.2.2\bin\x86_64-win64\fpc.cfg"
+          $fpcExe = Join-Path $lazDir "fpc\3.2.2\bin\x86_64-win64\fpc.exe"
+          $fpcSrc = Join-Path $lazDir "fpc\3.2.2\source"
           
-          $lclBase = Join-Path $lazDir "lcl\units\x86_64-win64"
-          $lclWin32 = Join-Path $lclBase "win32"
+          $cfgDir = Join-Path $env:RUNNER_TEMP "laz-cfg"
+          New-Item -ItemType Directory -Path $cfgDir -Force | Out-Null
           
-          Write-Host "Lazarus dir: $lazDir"
-          Write-Host "LCL base: $lclBase"
-          Write-Host "LCL win32: $lclWin32"
+          $xml = "<?xml version=""1.0""?>`n<CONFIG>`n  <EnvironmentOptions>`n    <LazarusDirectory Value=""$lazDir""/>`n    <CompilerFilename Value=""$fpcExe""/>`n    <FPCSourceDirectory Value=""$fpcSrc""/>`n  </EnvironmentOptions>`n</CONFIG>"
+          Set-Content -Path (Join-Path $cfgDir "environmentoptions.xml") -Value $xml -Encoding UTF8
           
-          # Проверяем, что Interfaces.ppu существует
-          $interfacesFile = Join-Path $lclWin32 "Interfaces.ppu"
-          if (Test-Path $interfacesFile) {
-            Write-Host "Found: $interfacesFile"
-          } else {
-            Write-Host "WARNING: Interfaces.ppu not found at $interfacesFile"
-            # Ищем файл по всей папке Lazarus
-            Get-ChildItem -Path $lazDir -Recurse -Filter "Interfaces.ppu" | ForEach-Object { Write-Host "Found at: $($_.FullName)" }
-          }
-          
-          # Добавляем пути к LCL-юнитам прямо в fpc.cfg
-          Add-Content -Path $fpcCfg -Value "-Fu$lclBase"
-          Add-Content -Path $fpcCfg -Value "-Fu$lclWin32"
-          
-          # Собираем проект
-          lazbuild -B SaveEditor.lpi
+          lazbuild --pcp="$cfgDir" -B SaveEditor.lpi
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
