@@ -24,30 +24,8 @@ jobs:
         run: |
           $lazbuildExe = (Get-Command lazbuild).Source
           $lazarusDir = Split-Path $lazbuildExe -Parent
-          $fpcDir = Join-Path $lazarusDir "fpc\3.2.2"
-          $fpcExe = Join-Path $fpcDir "bin\x86_64-win64\fpc.exe"
-          
-          $configDir = Join-Path $env:RUNNER_TEMP "lazarus-config"
-          New-Item -ItemType Directory -Path $configDir -Force
-          
-          $envXml = @"
-<?xml version="1.0" encoding="UTF-8"?>
-<CONFIG>
-  <EnvironmentOptions>
-    <Version Value="106"/>
-    <LazarusDirectory Value="$lazarusDir"/>
-    <CompilerFilename Value="$fpcExe"/>
-    <FPCSourceDirectory Value="$fpcDir\source"/>
-  </EnvironmentOptions>
-</CONFIG>
-"@
-          $envXml | Out-File (Join-Path $configDir "environmentoptions.xml") -Encoding UTF8
-          
           Write-Host "Lazarus dir: $lazarusDir"
-          Write-Host "FPC exe: $fpcExe"
-          Write-Host "Config dir: $configDir"
-          
-          lazbuild --pcp="$configDir" -B SaveEditor.lpi
+          lazbuild --pcp="$lazarusDir" --lazarusdir="$lazarusDir" -B SaveEditor.lpi
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
