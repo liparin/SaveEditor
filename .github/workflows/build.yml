@@ -23,9 +23,16 @@ jobs:
         shell: pwsh
         run: |
           $lazbuildExe = (Get-Command lazbuild).Source
-          $lazarusDir = Split-Path $lazbuildExe -Parent
-          Write-Host "Lazarus dir: $lazarusDir"
-          lazbuild --pcp="$lazarusDir" --lazarusdir="$lazarusDir" -B SaveEditor.lpi
+          $lazDir = Split-Path $lazbuildExe -Parent
+          $fpcExe = Join-Path $lazDir "fpc\3.2.2\bin\x86_64-win64\fpc.exe"
+          
+          $cfgDir = Join-Path $env:RUNNER_TEMP "laz-cfg"
+          New-Item -ItemType Directory -Path $cfgDir -Force | Out-Null
+          
+          $xml = '<CONFIG><EnvironmentOptions><LazarusDirectory Value="' + $lazDir + '"/><CompilerFilename Value="' + $fpcExe + '"/></EnvironmentOptions></CONFIG>'
+          Set-Content -Path (Join-Path $cfgDir "environmentoptions.xml") -Value $xml -Encoding UTF8
+          
+          & $lazbuildExe --pcp="$cfgDir" --lazarusdir="$lazDir" -B SaveEditor.lpi
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
